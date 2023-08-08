@@ -1,3 +1,6 @@
 environment.prod.ts
+environment.prod.api.ts
 environment.test.ts
-environment.ts
+environment.test.api.ts
+environment.org.ts
+environment.org.api.ts

@@ -4,6 +4,7 @@ import {
   HandleRepository,
 } from '@involvemint/server/core/domain-services';
 import {
+  apiEnvironment,
   BaSubmitEpApplicationDto,
   defaultStorefrontListingStatus,
   environment,
@@ -172,7 +173,7 @@ export class EpApplicationService {
       user: { id: true, changeMaker: { firstName: true } },
     });
 
-    const geo = geocoder.default({ provider: 'google', apiKey: environment.gcpApiKey });
+    const geo = geocoder.default({ provider: 'google', apiKey: apiEnvironment.gcpApiKey });
     const res = await geo.geocode(Object.entries(epApp.address).join(' '));
 
     const lat = Number(res[0]?.latitude?.toFixed(4));

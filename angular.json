@@ -99,6 +99,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "org": {
+              "fileReplacements":[
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.org.ts"
+                }
+              ]
             }
           }
         },
@@ -115,6 +123,9 @@
             },
             "test": {
               "browserTarget": "involvemint:build:test"
+            },
+            "org": {
+              "browserTarget": "involvemint:build:org"
             }
           }
         },
@@ -158,6 +169,9 @@
             },
             "test": {
               "devServerTarget": "involvemint:serve:test"
+            },
+            "org": {
+              "devServerTarget": "involvemint:serve"
             }
           }
         },
@@ -192,6 +206,10 @@
                 {
                   "replace": "libs/shared/domain/src/lib/environments/environment.ts",
                   "with": "libs/shared/domain/src/lib/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.api.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.prod.api.ts"
                 }
               ]
             },
@@ -203,6 +221,22 @@
                 {
                   "replace": "libs/shared/domain/src/lib/environments/environment.ts",
                   "with": "libs/shared/domain/src/lib/environments/environment.test.ts"
+                },
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.api.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.test.api.ts"
+                }
+              ]
+            },
+            "org": {
+              "fileReplacements":[
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.org.ts"
+                },
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.api.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.org.api.ts"
                 }
               ]
             }
@@ -213,6 +247,11 @@
           "options": {
             "buildTarget": "api:build",
             "port": 2324
+          },
+          "configurations": {
+            "org":{
+              "buildTarget": "api:build:org"
+            }
           }
         },
         "lint": {

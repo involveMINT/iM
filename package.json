@@ -9,6 +9,8 @@
     "start": "node dist/apps/api/main.js",
     "start:client": "ng serve involvemint",
     "start:server": "ng serve api",
+    "start:client:org": "ng serve involvemint -c org",
+    "start:server:org": "ng serve api -c org",
     "orcha": "npm i ../orcha/dist/libs/angular/orcha-angular-0.2.10.tgz ../orcha/dist/libs/common/orcha-common-0.2.10.tgz ../orcha/dist/libs/nestjs/orcha-nestjs-0.2.10.tgz ../orcha/dist/libs/testing/orcha-testing-0.2.10.tgz ../orcha/dist/libs/typeorm/orcha-typeorm-0.2.10.tgz && npm dedupe",
     "build": "nx run-many --target=build --projects=involvemint,api --prod --skip-nx-cache",
     "build:client": "nx run-many --target=build --projects=involvemint --prod --skip-nx-cache",

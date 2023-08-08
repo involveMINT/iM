@@ -4,6 +4,7 @@ import {
   SpApplicationRepository,
 } from '@involvemint/server/core/domain-services';
 import {
+  apiEnvironment,
   environment,
   ImConfig,
   ProcessSpApplicationDto,
@@ -99,7 +100,7 @@ export class SpApplicationService {
       user: { id: true, changeMaker: { firstName: true } },
     });
 
-    const geo = geocoder.default({ provider: 'google', apiKey: environment.gcpApiKey });
+    const geo = geocoder.default({ provider: 'google', apiKey: apiEnvironment.gcpApiKey });
     const res = await geo.geocode(Object.entries(spApp.address).join(' '));
 
     const lat = Number(res[0]?.latitude?.toFixed(4));

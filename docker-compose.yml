@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    hostname: postgres
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_INITDB_ARGS: '-A md5'
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./.docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: anish@involvemint.io
+      PGADMIN_DEFAULT_PASSWORD: involvemint
+    ports:
+      - '8889:80'
+    hostname: pgadmin
+    depends_on:
+      - postgres

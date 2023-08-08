@@ -1,5 +1,6 @@
 import { ExchangePartnerRepository } from '@involvemint/server/core/domain-services';
 import {
+  apiEnvironment,
   DeleteEpImageDto,
   EditEpProfileDto,
   environment,
@@ -79,7 +80,7 @@ export class ExchangePartnerService {
     }
 
     if (dto.changes.address) {
-      const geo = geocoder.default({ provider: 'google', apiKey: environment.gcpApiKey });
+      const geo = geocoder.default({ provider: 'google', apiKey: apiEnvironment.gcpApiKey });
       const res = await geo.geocode(Object.entries(dto.changes.address).join(' '));
       dto.changes.latitude = Number(res[0]?.latitude?.toFixed(4));
       dto.changes.longitude = Number(res[0]?.longitude?.toFixed(4));

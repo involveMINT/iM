@@ -1,4 +1,4 @@
-import { environment } from '@involvemint/shared/domain';
+import { apiEnvironment, environment } from '@involvemint/shared/domain';
 import { NestFactory } from '@nestjs/core';
 import * as admin from 'firebase-admin';
 import {
@@ -10,7 +10,7 @@ import { AppModule } from './app/app.module';
 initializeTransactionalContext();
 patchTypeORMRepositoryWithBaseRepository();
 
-admin.initializeApp({ credential: admin.credential.cert(environment.gcp) });
+admin.initializeApp({ credential: admin.credential.cert(apiEnvironment.gcp) });
 
 async function bootstrap() {
   // const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());

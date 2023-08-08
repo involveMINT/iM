@@ -9,7 +9,6 @@ export interface Env {
   appUrl: string;
   storageBucket: string;
   adminPasswordHash: string;
-  gcpApiKey: string;
   typeOrmConfig: TypeOrmModuleOptions;
   firebaseEnv: {
     apiKey: string;
@@ -30,7 +29,6 @@ export interface Env {
     authToken: string;
     sendingPhone: string;
   };
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  gcp: object;
+  
   scrypt: FirebaseScryptOptions;
 }

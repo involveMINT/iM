@@ -24,6 +24,7 @@ import {
 } from '@involvemint/server/core/domain-services';
 import {
   Address,
+  apiEnvironment,
   ChangeMaker,
   Credit,
   Enrollment,
@@ -855,7 +856,7 @@ export class AppService {
       return null;
     }
 
-    const geo = geocoder.default({ provider: 'google', apiKey: environment.gcpApiKey });
+    const geo = geocoder.default({ provider: 'google', apiKey: apiEnvironment.gcpApiKey });
     const res = await geo.geocode(address);
 
     const a = res[0];
