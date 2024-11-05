@@ -3,6 +3,7 @@ import { Credit } from '../credit';
 import { Enrollment } from '../enrollment';
 import { QuestionAnswer } from '../question-answer';
 import { Task } from '../task';
+import { ActivityPost } from '../activity-post';
 
 export interface Poi {
   id: string;
@@ -22,4 +23,6 @@ export interface Poi {
   enrollment: IManyToOne<Enrollment, 'pois'>;
   credits: IOneToMany<Credit, 'poi'>;
   task?: IOneToOne<Task, 'poi'>;
+
+  activityPost?: IOneToOne<ActivityPost, 'poi'>; /** CAN have an activity post */
 }

@@ -119,6 +119,8 @@
   --im-voucher-refunded: var(--im-red);
   --im-voucher-redeemed: var(--im-green);
 
+  --im-comment-background: #f4f5f8;
+
   /*
       ___          _       ___     _            
      |_ _|___ _ _ (_)__   / __|___| |___ _ _ ___
@@ -255,6 +257,8 @@
   --im-block-background: #222529;
 
   --im-logo-text-color: #ffffff;
+
+  --im-comment-background: #4a4a4a;
 
   ion-button.button-solid {
     --background: linear-gradient(

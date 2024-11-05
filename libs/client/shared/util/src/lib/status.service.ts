@@ -15,7 +15,7 @@ export class StatusService {
 
   constructor(public loadingController: LoadingController, private alertController: AlertController) {}
 
-  async showLoader(message: string = 'Loading...'): Promise<void> {
+  async showLoader(message = 'Loading...'): Promise<void> {
     this.loaderCount++;
     if (this.loaderCount === 1) {
       let topLoader = await this.loadingController.getTop();
@@ -100,7 +100,7 @@ export class StatusService {
   /**
    * Presents a window with a checkmark indicating something successful has occurred.
    */
-  async presentSuccess(message: string = 'Success!'): Promise<void> {
+  async presentSuccess(message = 'Success!'): Promise<void> {
     const loading = await this.loadingController.create({
       message,
       duration: 2000,

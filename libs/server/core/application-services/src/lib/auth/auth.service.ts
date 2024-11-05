@@ -111,7 +111,7 @@ export class AuthService {
     }
 
     const user = await this.userRepo.findOneOrFail(sign.userId);
-    if (!user.active && environment.production) {
+    if (!user.active && (environment.production || environment.test)) {
       throw new HttpException(`Email "${user.id}" has not been verified.`, HttpStatus.UNAUTHORIZED);
     }
 
@@ -152,7 +152,7 @@ export class AuthService {
       throw new HttpException(`You do not own this profile.`, HttpStatus.UNAUTHORIZED);
     }
 
-    if (!user.active && environment.production) {
+    if (!user.active && (environment.production || environment.test)) {
       throw new HttpException(`Your email has not been verified.`, HttpStatus.UNAUTHORIZED);
     }
 

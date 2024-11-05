@@ -24,6 +24,10 @@ import { ImRoutes } from '@involvemint/shared/domain';
         path: ImRoutes.admin.users.ROOT,
         loadChildren: () => import('./users/users.module').then((m) => m.UsersModule),
       },
+      {
+        path: ImRoutes.admin.moderation.ROOT,
+        loadChildren: () => import('./moderation/moderation.module').then((m) => m.AdminModerationModule),
+      },
     ]),
   ],
 })

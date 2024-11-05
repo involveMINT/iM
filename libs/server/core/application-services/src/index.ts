@@ -1,6 +1,8 @@
+export * from './lib/activity-post/activity-post.service';
 export * from './lib/auth/auth.service';
 export * from './lib/change-maker/change-maker.service';
 export * from './lib/chat/chat.service';
+export * from './lib/comment/comment.service';
 export { CreditService } from './lib/credit/credit.service';
 export * from './lib/enrollment/enrollment.service';
 export * from './lib/ep-application/ep-application.service';

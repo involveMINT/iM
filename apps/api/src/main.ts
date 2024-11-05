@@ -19,7 +19,7 @@ async function bootstrap() {
 
   // app.useWebSocketAdapter(new IoAdapter(app));
 
-  if (environment.production) {
+  if (environment.production || environment.test) {
     const port = Number(process.env.PORT) || 8080;
     await app.listen(port);
   } else {

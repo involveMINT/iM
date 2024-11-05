@@ -1,11 +1,15 @@
 import { User } from '@involvemint/shared/domain';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { ChangeMakerEntity } from '../change-maker/change-maker.entity';
 import { DbTableNames } from '../db-table-names';
 import { EpApplicationEntity } from '../ep-application/ep-application.entity';
 import { ExchangeAdminEntity } from '../exchange-admin/exchange-admin.entity';
 import { ServeAdminEntity } from '../serve-admin/serve-admin.entity';
 import { SpApplicationEntity } from '../sp-application/sp-application.entity';
+import { ActivityPostEntity } from '../activity-post/activity-post.entity';
+import { LikeEntity } from '../like/like.entity';
+import { FlagEntity } from '../flag/flag.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: DbTableNames.User })
 export class UserEntity implements Required<User> {
@@ -54,4 +58,19 @@ export class UserEntity implements Required<User> {
 
   @OneToMany(() => SpApplicationEntity, (e) => e.user)
   spApplications!: SpApplicationEntity[];
+
+  @OneToMany(() => ActivityPostEntity, (e) => e.user)
+  activityPosts!: ActivityPostEntity[];
+
+  @OneToMany(() => LikeEntity, (e) => e.user)
+  likes!: LikeEntity[];
+
+  @OneToMany(() => FlagEntity, (e) => e.user)
+  flags!: FlagEntity[];
+
+  @OneToMany(() => CommentEntity, (e) => e.user)
+  comments!: CommentEntity[];
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }

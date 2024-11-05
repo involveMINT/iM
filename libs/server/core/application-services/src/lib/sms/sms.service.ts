@@ -8,10 +8,12 @@ const sendingPhone = environment.twilio.sendingPhone;
 
 @Injectable()
 export class SMSService {
-  private t = environment.production ? twilio.default(accountSid, authToken) : null;
+  private t = environment.production || environment.test ? twilio.default(accountSid, authToken) : null;
+
+  shouldNotSendNotification = (!environment.production && !environment.test);
 
   sendInfoSMS({ message, phone }: { message: string; phone: string }) {
-    if (!environment.production || !phone || !message) return;
+    if (this.shouldNotSendNotification || !phone || !message) return;
 
     return this.t?.messages.create({
       body: `involveMINT notification: ${message}`,

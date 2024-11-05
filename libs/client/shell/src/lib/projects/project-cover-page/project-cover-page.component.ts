@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Navigation } from '@angular/router';
 import { ClientCmApiService, EnrollmentStoreModel } from '@involvemint/client/cm/api';
 import {
   ImViewProfileModalService,
@@ -18,6 +18,7 @@ import {
 } from '@involvemint/shared/domain';
 import { combineLatest, EMPTY } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 type ButtonState = EnrollmentStatus | 'notApplied' | 'loading' | 'createCmProfile';
 
@@ -36,12 +37,22 @@ interface State {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectCoverPageComponent extends StatefulComponent<State> implements OnInit {
+  from : any = "Projects";
   get EnrollmentStatus() {
     return EnrollmentStatus;
   }
 
   get ProjectStatus() {
     return ProjectStatus;
+  }
+  
+  get previousPage() {
+    const currNav = this.router.getCurrentNavigation()
+    if (currNav) {
+      let prevPage = currNav.previousNavigation?.finalUrl?.root.children.primary.segments[0].path;
+      this.from = prevPage == "activityfeed" ? "Activity" : "Projects";
+    }
+    return this.from;
   }
 
   constructor(
@@ -50,7 +61,8 @@ export class ProjectCoverPageComponent extends StatefulComponent<State> implemen
     public readonly route: RouteService,
     private readonly cmApi: ClientCmApiService,
     private readonly status: StatusService,
-    private readonly viewProfileModal: ImViewProfileModalService
+    private readonly viewProfileModal: ImViewProfileModalService,
+    private readonly router: Router,
   ) {
     super({ authenticated: false, buttonState: 'loading' });
   }
@@ -132,7 +144,7 @@ export class ProjectCoverPageComponent extends StatefulComponent<State> implemen
 
   login() {
     this.route.to.login.ROOT();
-  }
+  }  
 
   createCmProfile() {
     this.route.to.applications.cm.ROOT();

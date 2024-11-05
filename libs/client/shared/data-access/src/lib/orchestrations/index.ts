@@ -1,5 +1,7 @@
+export * from './activity-post.orchestration';
 export * from './change-maker.orchestration';
 export * from './chat.orchestration';
+export * from './comment.orchestration';
 export * from './credit.orchestration';
 export * from './enrollment.orchestration';
 export * from './ep-application.orchestration';

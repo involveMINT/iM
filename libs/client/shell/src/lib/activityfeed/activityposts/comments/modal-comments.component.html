@@ -1,0 +1,69 @@
+<ng-container *ngIf="state$ | async as state">
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Comments
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="cancel()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content id="content" class = "modal-content">
+    <ion-label class="empty-comments" *ngIf="state.comments.length === 0">
+      No comments yet.
+    </ion-label>
+    <ion-label class="empty-comments" *ngIf="state.comments.length === 0">
+      Be the first!
+    </ion-label>
+
+    <ng-container *ngFor="let comment of state.comments">
+      <ion-item lines="none">
+        <div class="comment-container">
+          <div class="member-handle">
+            <div
+              class="im-profile-pic feed"
+              *ngIf="comment.profilePicFilePath | imStorageUrl | async as url"
+              [ngStyle]="{ 'background-image': 'url(' + url + ')' }"
+            ></div>
+          </div>
+          <ion-list class="comment">
+            <ion-list class="name-info-handle">
+              <ion-label class="name"><b>{{ comment.name }}</b></ion-label>
+              <ion-icon class="information-circle" (click)="viewProfile(comment.handleId)" name="information-circle"></ion-icon>
+              <ion-label class="date" color="medium">{{ comment.dateCreated | date: 'longDate' }}</ion-label>
+            </ion-list>
+            <ion-label class="handle" color="medium">@{{ comment.handleId }}</ion-label>
+            <ion-label (click)="presentCommentActions(comment.id, comment)" class="ion-text-wrap" *ngIf="!checkCommentHidden(comment)">{{ comment.text }}</ion-label>
+            <ion-label class="ion-text-wrap removed" *ngIf="checkCommentHidden(comment)">This comment has been removed because it goes against community guidelines.</ion-label>
+          </ion-list>
+        </div>
+      </ion-item>
+    </ng-container>
+  </ion-content>
+
+  <ion-footer class="modal-content">
+    <ion-toolbar class="modal-content">
+      <ion-item lines="none">
+        <ion-input 
+          item-start 
+          [(ngModel)]="msg"
+          placeholder="Write a comment..."
+          (keyup.enter)="comment()" 
+          type="text" 
+          minlength="1" 
+          maxlength="200" 
+          color="medium" 
+          required
+          class="comment-input"> 
+        </ion-input>
+        <ion-button slot="end" (click)="comment()">Post</ion-button>
+      </ion-item>
+    </ion-toolbar>
+  </ion-footer>
+
+</ng-container>

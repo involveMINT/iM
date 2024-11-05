@@ -49,7 +49,7 @@ export class CreditService {
   /**
    * Admin only.
    */
-  async mint(_: IQuery<{}>, token: string, dto: MintDto) {
+  async mint(_: IQuery<Record<string, never>>, token: string, dto: MintDto) {
     await this.auth.validateAdminToken(token);
     const handle = await this.handle.findOneOrFail(dto.handle, {
       id: true,

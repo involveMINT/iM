@@ -30,6 +30,7 @@ import {
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { createQuery, IQuery, parseQuery } from '@orcha/common';
+import sharp from 'sharp';
 import { CronJob, CronTime } from 'cron';
 import * as uuid from 'uuid';
 import { AuthService } from '../auth/auth.service';
@@ -443,6 +444,29 @@ export class PoiService {
         HttpStatus.BAD_REQUEST
       );
     }
+
+    const MIN_WIDTH = 1080;
+    const MIN_HEIGHT = 1080;
+    const validateImageSize = async (file : Express.Multer.File) => {
+      const image = sharp(file.buffer);
+
+      const { width, height } = await image.metadata();
+
+      if (!width || !height) {
+        throw new HttpException(
+          `The uploaded images are in in an invalid state`,
+          HttpStatus.BAD_REQUEST
+        );
+      }
+
+      if (width < MIN_WIDTH || height < MIN_HEIGHT) {
+        throw new HttpException(
+          `Uploaded Proof of Impact photos must be at least ${MIN_WIDTH}x${MIN_HEIGHT} large.`,
+          HttpStatus.BAD_REQUEST
+        );
+      }
+    }
+    for (const file of files) await validateImageSize(file);
 
     await this.dbTransact.run(async () => {
       const imagesFilePaths: string[] = [];

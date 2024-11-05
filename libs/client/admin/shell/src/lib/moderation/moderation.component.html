@@ -1,0 +1,182 @@
+<ng-container *ngIf="state$ | async as state">
+    <ion-header [class.ion-no-border]="true">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Moderation</ion-title>
+        <ion-buttons slot="end">
+          <div *ngIf="state.onlyPostsWithFlaggedComments">
+            <div class="wrap">Showing flagged</div>
+          </div>
+          <div *ngIf="!state.onlyPostsWithFlaggedComments">
+            <div class="wrap">Showing all</div>
+          </div>
+          <ion-toggle class="spaced" [ngModel]="state.onlyPostsWithFlaggedComments" (ngModelChange)="updatePostsDisplayed()"></ion-toggle>
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-progress-bar type="indeterminate" [class.hide]="state.loaded"></ion-progress-bar>
+    </ion-header>
+
+    <ion-content>
+      <div class="im-cont" *ngIf="state.loaded">
+        <div class="im-centered" *ngIf="state.posts.length < 1 && state.loaded">
+          <div [style.display]="'grid'" [style.gap]="'0.1rem'">There are no activity posts.</div>
+        </div>
+  
+        <im-block
+          *ngFor="let post of state.posts; trackBy: trackPost"
+        >
+
+          <div body class="user-info">
+            <div
+              class="im-profile-pic medium"
+              *ngIf="getUserAvatar(post) | imStorageUrl | async as url"
+              [ngStyle]="{ 'background-image': 'url(' + url + ')' }"
+            ></div>
+            <ion-icon
+              *ngIf="!getUserAvatar(post)"
+              class="im-profile-pic-none"
+              name="person-circle"
+            ></ion-icon>
+            <div>
+              <ion-list class="name-handle">
+                <ion-label class="name-color"><b>{{ getUserFirstName(post) }} {{ getUserLastName(post) }}</b></ion-label>
+                <ion-icon class="information-circle" (click)="viewProfile(getUserHandle(post))" name="information-circle"></ion-icon>
+                <ion-label class="date" color="medium">{{ post.poi.dateSubmitted | date: 'longDate' }}</ion-label>
+              </ion-list>
+              <ion-label id="post-user-handle" (click)="message(getUserHandle(post))" class="handle">@{{ getUserHandle(post) }}</ion-label>
+            </div>
+          </div>
+
+          <div body class="timeline-details">
+            <hr class="separator">
+          </div>
+
+          <div body class="timeline-details">
+            <div class="project-description">{{ post.poi.enrollment.project.description }}</div>
+          </div>
+        
+          <!-- Adds Swip-able carousel... still needs images to be sized + desktop version -->
+          <div body class="activity-post-carousel">
+            <ion-row *ngIf="post.poi.imagesFilePaths.length > 1; else singleImage">
+              <ion-slides class="swiper-pagination" pager #slides [options]="{ scrollbar: false, loop: false }">
+                <ion-slide *ngFor="let image of post.poi.imagesFilePaths">
+                  <div class="relative">
+                    <div class="shadow" >
+                      <img id="shadow" [src]="image | imStorageUrl | async"/>
+                    </div>
+                    <ion-list class="projectText">
+                      <h2 class="overflow">{{ post.poi.enrollment.project.title }}</h2>
+                    </ion-list>
+                    <div class="statText">
+                      <p class="statDescription">Time Worked</p>
+                      <h2 class="stat">{{calculateTimeWorked(post.poi)}}</h2>
+                    </div>
+                  </div>
+                  <div class="scroll-left">
+                    <ion-button class="slide-prev-button" (click)="slides.slidePrev()" fill="clear" *ngIf="post.poi.imagesFilePaths.length > 1">
+                      <ion-icon name="chevron-back-outline"></ion-icon>
+                    </ion-button>
+                  </div>
+                  <div class="scroll-right">
+                    <ion-button class="slide-next-button" (click)="slides.slideNext()" fill="clear" *ngIf="post.poi.imagesFilePaths.length > 1">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </ion-button>
+                  </div>
+                </ion-slide>
+              </ion-slides>
+            </ion-row>
+
+            <ng-template #singleImage>
+              <ion-row>
+                <ion-slides class="swiper-pagination" #slides [options]="{ pager: false, scrollbar: false, loop: false }">
+                  <ion-slide *ngIf="post.poi.imagesFilePaths.length === 0">
+                    <div class="relative">
+                      <div class="shadow">
+                        <img src="https://drive.google.com/uc?export=view&id=0B_Gw_P6xxHWLdUtoM1pwNHNnX3M"/>
+                      </div>
+                      <ion-list class="projectText">
+                        <h2 class="overflow">{{ post.poi.enrollment.project.title }}</h2>
+                      </ion-list>
+                      <div class="statText">
+                        <p class="statDescription">Time Worked</p>
+                        <h2 class="stat">{{calculateTimeWorked(post.poi)}}</h2>
+                      </div>
+                    </div>
+                  </ion-slide>
+                  <ion-slide *ngFor="let image of post.poi.imagesFilePaths">
+                    <div class="relative">
+                      <div class="shadow">
+                        <img [src]="image | imStorageUrl | async"/>
+                      </div>
+                      <ion-list class="projectText">
+                        <h2 class="overflow">{{ post.poi.enrollment.project.title }}</h2>
+                      </ion-list>
+                      <div class="statText">
+                        <p class="statDescription">Time Worked</p>
+                        <h2 class="stat">{{calculateTimeWorked(post.poi)}}</h2>
+                      </div>
+                    </div>
+                  </ion-slide>
+                </ion-slides>
+              </ion-row>
+            </ng-template>
+          </div>
+
+          <div body class="timeline-details">
+            <div class="timeline-detail-item">
+              <ion-buttons id="post-buttons" class="button-spacing" slot="start">
+                <div *ngIf="!checkUserLiked(post)">
+                  <ion-button [disabled]="true" #likeButton (click)="like(post.id)">
+                    <ion-icon class="like-button" name="heart-outline"></ion-icon>
+                  </ion-button>
+                </div>
+                <div *ngIf="checkUserLiked(post)">
+                  <ion-button [disabled]="true" #unlikeButton (click)="unlike(post.id)">
+                    <ion-icon class="like-button" name="heart"></ion-icon>
+                  </ion-button>
+                </div>
+                <ion-button (click)="viewComments(post)">
+                  <ion-icon class="comment-button" name="chatbox-outline" expand="block"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+      
+            <div class="timeline-item-details">
+              <div *ngIf="!checkUserLiked(post) && post.likeCount > 0"> 
+                <ion-label class="timeline-detail-item" color="dark">
+                  <p class="like-text">Liked by <b>{{post.likeCount}} others </b></p>
+                </ion-label>
+              </div>
+              <div *ngIf="checkUserLiked(post) && post.likeCount > 0"> 
+                <ion-label class="timeline-detail-item" color="dark">
+                  <p class="like-text">Liked by <b>you</b> and <b>{{post.likeCount - 1}} others </b></p>
+                </ion-label>
+              </div>
+      
+              <div *ngIf="post.likeCount === 0"> 
+                <ion-button slot="start" class="comment-dropdown-nolikes" (click)="viewComments(post)" fill="clear" >
+                  <p>Comments</p>
+                  <ion-icon name="chevron-down" fill="clear"></ion-icon>
+                </ion-button>
+              </div>
+              <div *ngIf="post.likeCount > 0"> 
+                <ion-button slot="start" class="comment-dropdown" (click)="viewComments(post)" fill="clear" >
+                  <p>Comments</p>
+                  <ion-icon name="chevron-down" fill="clear"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </im-block>
+
+        <ion-infinite-scroll threshold="100px" *ngIf="!allPagesLoaded" (ionInfinite)="loadMore($event)">
+          <ion-infinite-scroll-content
+            loadingSpinner="bubbles"
+            loadingText="Loading more posts..."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </div>
+    </ion-content>
+  </ng-container>

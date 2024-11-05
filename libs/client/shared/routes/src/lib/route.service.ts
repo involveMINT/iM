@@ -90,8 +90,10 @@ export class RouteService extends RxJSBaseClass {
             break;
         }
       }
+      console.log('3', obj);
       return obj as unknown as Routes<IFrontendRoutes>;
     };
+    console.log('4');
     return traverse({ ...cloneDeep(this._routes.path), ROOT: '' });
   }
 

@@ -2,27 +2,37 @@ import { Injectable } from '@angular/core';
 import { RouteService } from '@involvemint/client/shared/routes';
 import {
   ChangePasswordDto,
+  CreateActivityPostDto,
   CreateChangeMakerProfileDto,
+  CreateCommentDto,
   DeleteEpImageDto,
   DeleteOfferImageDto,
   DeleteRequestImageDto,
   DeleteSpImageDto,
+  DisplayCommentsDto,
   EditCmProfileDto,
   EditEpProfileDto,
   EditSpProfileDto,
+  FlagCommentDto,
+  GetActivityPostDto,
   GetSuperAdminForExchangePartnerDto,
+  HideCommentDto,
   ImConfig,
+  LikeActivityPostDto,
   SignUpDto,
   SubmitEpApplicationDto,
   SubmitSpApplicationDto,
   TransactionDto,
+  UnflagCommentDto,
+  UnhideCommentDto,
+  UnlikeActivityPostDto,
   UpdateOfferDto,
   UpdateRequestDto,
   WalletTabs,
 } from '@involvemint/shared/domain';
 import { UnArray } from '@involvemint/shared/util';
 import { Actions, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import * as CreditsActions from './credits/credits.actions';
 import * as CreditsSelectors from './credits/credits.selectors';
@@ -54,6 +64,12 @@ import * as TransactionsActions from './transactions/transactions.actions';
 import * as TransactionsSelectors from './transactions/transactions.selectors';
 import * as VouchersActions from './vouchers/vouchers.actions';
 import * as VouchersSelectors from './vouchers/vouchers.selectors';
+import * as PostActions from './activity-posts/activity-posts.actions';
+import * as PostSelectors from './activity-posts/activity-posts.selectors';
+import * as CommentSelectors from './comments/comments.selectors';
+import * as CommentActions from './comments/comments.actions';
+import { CommentStoreModel } from './comments/comments.reducer';
+import { PostStoreModel } from './activity-posts';
 
 @Injectable()
 export class UserFacade {
@@ -487,7 +503,7 @@ export class UserFacade {
        * @param returnToEpStorefront True to route to EP Storefront route, False to route to marketplace
        * route after create
        */
-      create: (returnToEpStorefront: boolean = false) => {
+      create: (returnToEpStorefront = false) => {
         this.store.dispatch(OffersActions.createOffer({ returnToEpStorefront }));
       },
       update: (dto: UpdateOfferDto) => {
@@ -497,7 +513,7 @@ export class UserFacade {
        * @param returnToEpStorefront True to route back to EP Storefront route, False to route back to
        * marketplace route after delete
        */
-      delete: (offer: OfferStoreModel, returnToEpStorefront: boolean = false) => {
+      delete: (offer: OfferStoreModel, returnToEpStorefront = false) => {
         this.store.dispatch(OffersActions.deleteOffer({ offer, returnToEpStorefront }));
       },
       uploadImages: (offer: OfferStoreModel, images: File[]) => {
@@ -549,7 +565,7 @@ export class UserFacade {
        * @param returnToEpStorefront True to route to EP Storefront route, False to route to marketplace
        * route after create
        */
-      create: (returnToEpStorefront: boolean = false) => {
+      create: (returnToEpStorefront = false) => {
         this.store.dispatch(RequestsActions.createRequest({ returnToEpStorefront }));
       },
       update: (dto: UpdateRequestDto) => {
@@ -559,7 +575,7 @@ export class UserFacade {
        * @param returnToEpStorefront True to route back to EP Storefront route, False to route back to
        * marketplace route after delete
        */
-      delete: (request: RequestStoreModel, returnToEpStorefront: boolean = false) => {
+      delete: (request: RequestStoreModel, returnToEpStorefront = false) => {
         this.store.dispatch(RequestsActions.deleteRequest({ request, returnToEpStorefront }));
       },
       uploadImages: (request: RequestStoreModel, images: File[]) => {
@@ -635,6 +651,98 @@ export class UserFacade {
       ),
     },
   };
+
+  readonly posts = {
+    dispatchers: {
+      loadPosts: () => {
+        this.store.pipe(select(PostSelectors.getPosts), take(1)).subscribe((state) => {
+          this.store.dispatch(PostActions.loadPosts({ page: state.pagesLoaded + 1, limit: state.limit }));
+        });
+      },
+      get: (dto: GetActivityPostDto) => {
+        this.store.dispatch(PostActions.getPost({ dto }));
+      },
+      create: (dto: CreateActivityPostDto) => {
+        this.store.dispatch(PostActions.createPost({ dto }));
+      },
+      like: (dto: LikeActivityPostDto) => {
+        this.store.dispatch(PostActions.like({ dto }));
+      },
+      unlike: (dto: UnlikeActivityPostDto) => {
+        this.store.dispatch(PostActions.unlike({ dto }));
+      },
+    },
+    selectors: {
+      posts$: this.store.pipe(select(PostSelectors.getPosts)).pipe(
+        tap(({ loaded, limit }) => {
+          if (!loaded) {
+            this.store.dispatch(PostActions.loadPosts({ page: 1, limit }));
+          }
+        })
+      ),
+      getPost: (postId: string) =>
+        this.store.pipe(select(PostSelectors.selectPost(postId))).pipe(
+          tap(({ loaded, limit }) => {
+            if (!loaded) {
+              this.store.dispatch(PostActions.loadPosts({ page: 1, limit }));
+            }
+          })
+        ),
+    },
+    actionListeners: {
+      loadPosts: {
+        success: this.actions$.pipe(ofType(PostActions.loadPostsSuccess)),
+        error: this.actions$.pipe(ofType(PostActions.loadPostsError)),
+      },
+    }
+  }
+
+  readonly comments = {
+    dispatchers: {
+      loadComments: () => {
+        this.store.pipe(select(CommentSelectors.getComments), take(1)).subscribe((state) => {
+          this.store.dispatch(CommentActions.loadComments({ page: state.pagesLoaded + 1}));
+        });
+      },
+      initComments: (comments: CommentStoreModel[]) => {
+        this.store.pipe(select(CommentSelectors.getComments), take(1)).subscribe((_state) => {
+          this.store.dispatch(CommentActions.initComments({ comments: comments}));
+        })
+      },
+      createComment: (dto: CreateCommentDto) => {
+        this.store.dispatch(CommentActions.createComment({ dto }));
+      },
+      flagComment: (dto: FlagCommentDto) => {
+        this.store.dispatch(CommentActions.flagComment({ dto }));
+      },
+      unflagComment: (dto: UnflagCommentDto) => {
+        this.store.dispatch(CommentActions.unflagComment({ dto }));
+      },
+      hideComment: (dto: HideCommentDto) => {
+        this.store.dispatch(CommentActions.hideComment({ dto }));
+      },
+      unhideComment: (dto: UnhideCommentDto) => {
+        this.store.dispatch(CommentActions.unhideComment({ dto }));
+      },
+    },
+    selectors: {
+      comments$: this.store.select(CommentSelectors.getComments),
+      getComment: (commentId: string) =>
+        this.store.pipe(select(CommentSelectors.getComment(commentId))).pipe(
+          tap(({ loaded }) => {
+            if (!loaded) {
+              this.store.dispatch(CommentActions.loadComments({ page: 1 }));
+            }
+          })
+        ),
+    },
+    actionListeners: {
+      loads: {
+        success: this.actions$.pipe(ofType(CommentActions.loadCommentsSuccess)),
+        error: this.actions$.pipe(ofType(CommentActions.loadCommentsError)),
+      }
+    }
+  }
 
   constructor(
     private readonly store: Store,

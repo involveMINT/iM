@@ -4,8 +4,10 @@ import * as mailgun from 'mailgun-js';
 
 @Injectable()
 export class EmailService {
-  mg = environment.production ? mailgun.default(environment.mailgun) : null;
+  mg = environment.production || environment.test ? mailgun.default(environment.mailgun) : null;
   noreply = 'your no reply <noreply@example.com>';
+
+  shouldNotSendNotification = !environment.production && !environment.test;
 
   constructor(@Inject(FRONTEND_ROUTES_TOKEN) private readonly route: FrontendRoutes) { }
 
@@ -20,7 +22,7 @@ export class EmailService {
     subject: string;
     email: string | string[];
   }) {
-    if (!environment.production) return;
+    if (this.shouldNotSendNotification) return;
 
     const msg = {
       from: this.noreply,
@@ -35,7 +37,7 @@ export class EmailService {
   }
 
   sendEmailVerification(email: string, hash: string, registerAs?: SignUpDto['registerAs']) {
-    if (!environment.production) return;
+    if (this.shouldNotSendNotification) return;
 
     const url = `${environment.appUrl}${this.route.path.verifyEmail.ROOT}?email=${email}&hash=${hash}&register=${registerAs}`;
 
@@ -52,7 +54,7 @@ export class EmailService {
   }
 
   sendForgotPassword(email: string, hash: string) {
-    if (!environment.production) return;
+    if (this.shouldNotSendNotification) return;
 
     const url = `${environment.appUrl}${this.route.path.forgotPasswordChange.ROOT}?email=${email}&hash=${hash}`;
 
@@ -77,7 +79,7 @@ export class EmailService {
     temporaryPassword: string,
     forgotPasswordHash: string
   ) {
-    if (!environment.production) return;
+    if (this.shouldNotSendNotification) return;
 
     const url = `${environment.appUrl}${this.route.path.activateUserAccount.ROOT}?email=${newUserEmail}&epId=${newEpId}&activationHash=${activationHash}&temporaryPassword=${temporaryPassword}&forgotPasswordHash=${forgotPasswordHash}`;
 

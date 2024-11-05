@@ -73,6 +73,11 @@ export class UserService {
         spApplications: [],
         joyride: true,
         baAdmin: false,
+        activityPosts: [],
+        likes: [],
+        comments: [],
+        updatedAt: new Date(),
+        flags: []
       },
       {}
     );
@@ -99,14 +104,14 @@ export class UserService {
     if (!compare) {
       throw new HttpException(`Incorrect password.`, HttpStatus.UNAUTHORIZED);
     }
-    if (!user.active && environment.production) {
+    if (!user.active && (environment.production || environment.test)) {
       throw new HttpException(`User ${user.id} has not been verified.`, HttpStatus.UNAUTHORIZED);
     }
 
     /* Login */
 
     // If user correctly logs in, then don't allow for password reset.
-    await this.userRepo.update(user.id, { forgotPasswordHash: null!, dateLastLoggedIn: new Date() });
+    await this.userRepo.update(user.id, { forgotPasswordHash: null!, dateLastLoggedIn: user.updatedAt });
 
     // Generate token with the user's email as the token's hash to later verify a token's owner.
     const token = this.auth.createToken({ userId: id });
@@ -182,6 +187,11 @@ export class UserService {
         spApplications: [],
         joyride: true,
         baAdmin: false,
+        activityPosts: [],
+        likes: [],
+        comments: [],
+        flags: [],
+        updatedAt: new Date(),
       },
       { id: true }
     );

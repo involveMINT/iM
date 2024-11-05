@@ -33,7 +33,7 @@ export class UserSessionEffects {
           this.user.login({ token: true }, { id, password }).pipe(
             tap(({ token }) => ImAuthTokenStorage.setValue({ id, token })),
             map(({ token }) => {
-              this.route.to.ROOT();
+              this.route.to.activityfeed.ROOT();
               this.status.dismissLoader();
               ImAuthTokenStorage.setValue({ id, token });
               return UserSessionActions.userLoginSuccess({ id, token });
@@ -109,7 +109,7 @@ export class UserSessionEffects {
           this.user.signUp({ token: true }, dto).pipe(
             map(({ token }) => {
               ImAuthTokenStorage.setValue({ id: dto.id, token });
-              if (environment.production) {
+              if (environment.production || environment.test) {
                 (async () => {
                   const modal = await this.infoModal.open({
                     title: 'Check your email',
@@ -121,7 +121,7 @@ export class UserSessionEffects {
                   await this.route.to.login.ROOT();
                 })();
               } else {
-                this.route.to.ROOT();
+                this.route.to.activityfeed.ROOT();
               }
               return UserSessionActions.userSignUpSuccess({ token });
             })

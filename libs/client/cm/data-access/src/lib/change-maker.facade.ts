@@ -161,5 +161,8 @@ export class ChangeMakerFacade {
     },
   };
 
-  constructor(private readonly store: Store, private readonly actions$: Actions) {}
+  constructor(
+    private readonly store: Store, 
+    private readonly actions$: Actions,
+  ) {}
 }

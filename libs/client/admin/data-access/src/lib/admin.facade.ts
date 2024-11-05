@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import {
   GrantBaPrivilegesDto,
+  HideCommentDto,
   MintDto,
   ProcessEpApplicationDto,
   ProcessSpApplicationDto,
   RevokeBaPrivilegesDto,
+  UnhideCommentDto,
 } from '@involvemint/shared/domain';
 import { Actions, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import * as ApplicationsActions from './applications/applications.actions';
 import * as ApplicationsSelectors from './applications/applications.selectors';
 import * as CreditsActions from './credits/credits.actions';
@@ -17,6 +19,7 @@ import * as PrivilegesSelectors from './privileges/privileges.selectors';
 
 @Injectable()
 export class AdminFacade {
+
   readonly applications = {
     selectors: {
       state$: this.store.pipe(select(ApplicationsSelectors.getState)).pipe(

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Notifications
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+  <div class="im-cont" >
+
+    <div class="im-centered" *ngIf="digestPosts.length < 1">
+      <div [style.display]="'grid'" [style.gap]="'0.1rem'">No Recent Notifications</div>
+    </div>
+
+      <im-block
+          *ngFor="let post of digestPosts"
+          imageSlot="left"
+          [images]="selectPostImage(post.poi.imagesFilePaths)"
+          style="cursor: pointer;"
+          (click)="openPost(post)"
+      >
+          <div header class="im-primary-text notification-item">Your POI on {{ convertDate(post.dateCreated) }}</div>
+          <div body class="timeline-details">
+              <div class="timeline-detail-item">
+                <div *ngIf="post.likes.length > 0">
+                  Your post has <b [style.color]="'var(--im-poi-approved)'">{{post.likes.length}}</b> new {{post.likes.length === 1 ? "like" : "likes"}}
+                  <ion-icon name="heart"></ion-icon>
+                </div>
+              </div>
+              <br>
+              <div class="timeline-detail-item">
+                <div *ngIf="post.comments.length > 0">
+                  Your post has <b [style.color]="'var(--im-poi-approved)'">{{post.comments.length}}</b> new {{post.comments.length === 1 ? "comment" : "comments"}}
+                  <ion-icon slot="icon-only" name="chatbubble-ellipses" ></ion-icon>
+                </div>
+              </div>
+          </div>
+
+      </im-block>
+
+  </div>
+
+</ion-content>

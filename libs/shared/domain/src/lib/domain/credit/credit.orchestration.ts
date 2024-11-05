@@ -4,5 +4,5 @@ import { Credit } from './credit.model';
 
 export interface ICreditOrchestration {
   getCreditsForProfile: IOperation<Credit[], GetCreditsForProfileDto>;
-  mint: IOperation<{}, MintDto>;
+  mint: IOperation<Record<string, never>, MintDto>;
 }

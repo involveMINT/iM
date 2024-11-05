@@ -1,0 +1,49 @@
+.comment-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex: 1;
+  }
+
+  .flag-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-right: 12px;
+    color: black;
+  }
+
+/* Other CSS rules remain the same */
+.comment {
+    flex-direction: column;
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    background: #f4f5f8;
+    color: #000;
+    border-color: #fff;
+    border-style: solid;
+    border-radius: 25px;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    hyphens: auto;
+  }
+  
+  .member-handle {
+    align-self: flex-start;
+    padding: 8px;
+  }
+  
+  .pointer {
+    cursor: pointer;
+  }
+  
+  .spaced {
+    padding-bottom: 4px;
+  }
+  
+  .ion-text-wrap.removed {
+    color: #ababab;
+    font-style: italic;
+  }

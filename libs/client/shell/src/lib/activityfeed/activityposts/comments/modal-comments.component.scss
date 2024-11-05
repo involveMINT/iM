@@ -1,0 +1,98 @@
+.comment-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex: 1;
+  padding-right: 10px;
+  --ion-item-background: var(--ion-toolbar-background)
+}
+  
+.comment {
+  flex-direction: column;
+  padding: 12px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border-radius: 25px;
+  background: rgb(245, 245, 245);
+}
+
+.date {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  margin-top: +2px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+ 
+.empty-comments {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  transform: translateY(175px);
+}
+
+.handle {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  padding-bottom: 4px;
+  text-decoration-line: underline;
+  background: var(--im-comment-background);
+}
+
+.information-circle {
+  display: grid;
+  width: 13.68px !important;
+  height: 13.68px !important;
+  grid-template-columns: auto 1fr;
+  padding-left: 3px;
+  padding-right: 2px;
+  cursor: pointer;
+}
+
+.member-handle {
+  align-self: flex-start;
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+  
+.name {
+  color: var(--im-green);
+}
+
+.name-info-handle {
+  align-items: center;
+  display: flex;
+  font-size: small;
+  padding: 0px;
+  background: var(--im-comment-background);
+}
+
+.ion-text-wrap {
+  color: var(--ion-text-color);
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  word-break: break-word;
+  hyphens: auto;
+  cursor: pointer;
+}
+
+.ion-text-wrap.removed {
+  color: #ababab;
+  font-style: italic;
+}
+
+.comment-input {
+  color: var(--ion-text-color);
+  background: var(--im-input-background);
+}
+
+.modal-content {
+  --ion-item-background: var(--ion-toolbar-background);
+}
+  

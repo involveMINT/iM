@@ -14,6 +14,10 @@ export const ImRoutes = {
   login: {
     ROOT: 'login',
   },
+  comments: {
+    ROOT: 'comments',
+    THREAD: 0,
+  },
   signUp: {
     ROOT: 'signUp',
   },
@@ -51,6 +55,9 @@ export const ImRoutes = {
       ROOT: 'request',
       REQUEST: 0,
     },
+  },
+  activityfeed: {
+    ROOT: 'activityfeed',
   },
   settings: {
     ROOT: 'settings',
@@ -165,5 +172,8 @@ export const ImRoutes = {
     users: {
       ROOT: 'users',
     },
+    moderation: {
+      ROOT: 'moderation',
+    }
   },
 };

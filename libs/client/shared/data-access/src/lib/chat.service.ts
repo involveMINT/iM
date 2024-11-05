@@ -95,9 +95,10 @@ export class ChatService extends StatefulComponent<State> {
 
     const myRooms = await _myRooms.get().pipe(take(1)).toPromise();
 
+    const wantedMembers = [...members.map(m => m.handleId), me.handle.id].sort()
     const existingRooms = myRooms.docs
       .map((d) => d.data() as ChatRoom)
-      .filter((r) => lodash.isEqual(r.members, [...members.map((member) => member.handleId), me.handle.id]));
+      .filter((r) => lodash.isEqual(wantedMembers, r.memberHandles.sort()))
 
     if (existingRooms.length > 0) {
       const alreadyExistingRoom = existingRooms[0];

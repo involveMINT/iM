@@ -5,6 +5,7 @@ import { DbTableNames } from '../db-table-names';
 import { EnrollmentEntity } from '../enrollment/enrollment.entity';
 import { QuestionAnswerEntity } from '../question-answer/question-answer.entity';
 import { TaskEntity } from '../task/task.entity';
+import { ActivityPostEntity } from '../activity-post/activity-post.entity';
 
 @Entity({ name: DbTableNames.Poi })
 export class PoiEntity implements Required<Poi> {
@@ -55,4 +56,7 @@ export class PoiEntity implements Required<Poi> {
 
   @OneToOne(() => TaskEntity, (e) => e.poi, { nullable: true })
   task!: TaskEntity;
+
+  @OneToOne(() => ActivityPostEntity, (e) => e.poi, { nullable: true })
+  activityPost!: ActivityPostEntity;
 }

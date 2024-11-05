@@ -20,7 +20,7 @@ export class CreditOrchestration implements IServerOrchestration<ICreditOrchestr
   }
 
   @ServerOperation()
-  mint(query: IQuery<{}>, token: string, dto: MintDto) {
+  mint(query: IQuery<Record<string,never>>, token: string, dto: MintDto) {
     return this.credit.mint(query, token, dto);
   }
 }

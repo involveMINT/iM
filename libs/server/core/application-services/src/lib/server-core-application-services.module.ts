@@ -3,10 +3,12 @@ import { FRONTEND_ROUTES_TOKEN, ImRoutes } from '@involvemint/shared/domain';
 import { routesFactory } from '@involvemint/shared/util';
 import { Global, HttpModule, Module, Provider } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ActivityPostService } from './activity-post/activity-post.service';
 import { AppInitService } from './app-init/app-init.service';
 import { AuthService } from './auth/auth.service';
 import { ChangeMakerService } from './change-maker/change-maker.service';
 import { ChatService } from './chat/chat.service';
+import { CommentService } from './comment/comment.service';
 import { CreditService } from './credit/credit.service';
 import { EmailService } from './email/email.service';
 import { EnrollmentService } from './enrollment/enrollment.service';
@@ -36,10 +38,12 @@ const services: Provider[] = [
     provide: FRONTEND_ROUTES_TOKEN,
     useValue: routesFactory(ImRoutes),
   },
+  ActivityPostService,
   AppInitService,
   AuthService,
   ChangeMakerService,
   ChatService,
+  CommentService,
   CreditService,
   DbTransactionCreator,
   EmailService,

@@ -244,6 +244,7 @@ export class PoiEffects {
             filter((body) => !!body),
             map((poi) => {
               if (!poi) throw new Error('No POI Emitted!');
+              this.user.posts.dispatchers.create({poiId: poi.id});
               return PoisActions.submitPoiSuccess({ poi });
             })
           ),

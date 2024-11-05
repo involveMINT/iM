@@ -1,0 +1,49 @@
+<ng-container *ngIf="state$ | async as state">
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Comments
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="cancel()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content id="content">
+    <ion-list lines="none">
+        <ion-item *ngFor="let comment of state.comments">
+          <div class="comment-container">
+            <div class="member-handle">
+              <div
+                  class="im-profile-pic medium"
+                  *ngIf="comment.profilePicFilePath | imStorageUrl | async as url"
+                  [ngStyle]="{ 'background-image': 'url(' + url + ')' }"
+                ></div>
+            </div>
+            <ion-list class="comment">
+              <ion-label class="pointer" (click)="viewProfile(comment.handleId)" > <b>@{{ comment.handleId }}</b> </ion-label>
+              <ion-label class="spaced" color="medium"> {{ comment.name }} </ion-label>
+              <ion-label class="ion-text-wrap"> {{ comment.text }} </ion-label>
+            </ion-list>
+          </div>
+          <div class="flag-container">
+            <ion-icon [name]="comment.flagCount > 0 ? 'flag' : 'flag-outline'"></ion-icon>
+          </div>
+          <div class="flag-container">
+            <p>{{comment.flagCount}}</p>
+          </div>
+          <div *ngIf="!checkCommentHidden(comment)">
+            <ion-button class="hide-button" color="danger" (click)="hide(comment.id)">Hide</ion-button>
+          </div>
+          <div *ngIf="checkCommentHidden(comment)">
+            <ion-button class="unhide-button" color="medium" (click)="unhide(comment.id)">Unhide</ion-button>
+          </div>
+        </ion-item>
+    </ion-list>
+  </ion-content>
+
+</ng-container>

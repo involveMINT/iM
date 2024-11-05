@@ -99,6 +99,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "org": {
+              "fileReplacements":[
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.org.ts"
+                }
+              ]
             }
           }
         },
@@ -115,6 +123,9 @@
             },
             "test": {
               "browserTarget": "involvemint:build:test"
+            },
+            "org": {
+              "browserTarget": "involvemint:build:org"
             }
           }
         },
@@ -158,6 +169,9 @@
             },
             "test": {
               "devServerTarget": "involvemint:serve:test"
+            },
+            "org": {
+              "devServerTarget": "involvemint:serve"
             }
           }
         },
@@ -205,6 +219,14 @@
                   "with": "libs/shared/domain/src/lib/environments/environment.test.ts"
                 }
               ]
+            },
+            "org": {
+              "fileReplacements":[
+                {
+                  "replace": "libs/shared/domain/src/lib/environments/environment.ts",
+                  "with": "libs/shared/domain/src/lib/environments/environment.org.ts"
+                }
+              ]
             }
           }
         },
@@ -213,6 +235,11 @@
           "options": {
             "buildTarget": "api:build",
             "port": 2324
+          },
+          "configurations": {
+            "org":{
+              "buildTarget": "api:build:org"
+            }
           }
         },
         "lint": {

@@ -1,0 +1,23 @@
+<ng-container *ngIf="state$ | async as state">
+
+    <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="close()">
+              <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+  <ion-content>
+
+    <app-post
+        *ngIf="state.post"
+        [post]="state.post" 
+    >
+    </app-post>
+
+  </ion-content>
+
+</ng-container>

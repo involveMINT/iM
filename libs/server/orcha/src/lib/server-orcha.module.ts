@@ -1,8 +1,10 @@
 import { ServerCoreApplicationServicesModule } from '@involvemint/server/core/application-services';
 import { Module } from '@nestjs/common';
 import { OrchaModule } from '@orcha/nestjs';
+import { ActivityPostOrchestration } from './activity-post/activity-post.orchestration';
 import { ChangeMakerOrchestration } from './change-maker/change-maker.orchestration';
 import { ChatOrchestration } from './chat/chat.orchestration';
+import { CommentOrchestration } from './comment/comment.orchestration';
 import { CreditOrchestration } from './credit/credit.orchestration';
 import { EnrollmentOrchestration } from './enrollment/enrollment.orchestration';
 import { EpApplicationGateway } from './ep-application/ep-application.gateway';
@@ -29,8 +31,10 @@ import { VoucherOrchestration } from './voucher/voucher.orchestration';
     ServerCoreApplicationServicesModule,
     OrchaModule.forFeature({
       orchestrations: [
+        ActivityPostOrchestration,
         ChangeMakerOrchestration,
         ChatOrchestration,
+        CommentOrchestration,
         CreditOrchestration,
         EnrollmentOrchestration,
         ExchangeAdminOrchestration,

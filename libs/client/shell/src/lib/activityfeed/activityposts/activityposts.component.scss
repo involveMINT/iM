@@ -1,0 +1,14 @@
+.timeline-details {
+  display: grid;
+}
+
+.timeline-detail-item {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: auto 1fr;
+
+  ion-icon {
+    font-size: 1.5em;
+  }
+}

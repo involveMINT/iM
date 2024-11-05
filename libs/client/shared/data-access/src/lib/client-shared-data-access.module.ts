@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { OrchaModule } from '@orcha/angular';
+import { PostEffects, PostsReducer, POSTS_KEY } from './+state/activity-posts';
 import { CreditsEffects } from './+state/credits/credits.effects';
 import { CreditReducer, CREDITS_KEY } from './+state/credits/credits.reducer';
 import { ProjectsEffects } from './+state/market/market.effects';
@@ -31,8 +32,10 @@ import { EpApplicationGateway } from './gateways/ep-application.gateway';
 import { SpApplicationGateway } from './gateways/sp-application.gateway';
 import { ImProfileSelectModalModule } from './modals/im-profile-select-modal/im-profile-select-modal.module';
 import {
+  ActivityPostOrchestration,
   ChangeMakerOrchestration,
   ChatOrchestration,
+  CommentOrchestration,
   CreditOrchestration,
   EnrollmentOrchestration,
   EpApplicationOrchestration,
@@ -52,6 +55,8 @@ import { PoiOrchestration } from './orchestrations/poi.orchestration';
 import { RequestOrchestration } from './orchestrations/request.orchestration';
 import { ServePartnerOrchestration } from './orchestrations/serve-partner.orchestration';
 import { StorageOrchestration } from './orchestrations/storage.orchestration';
+import { COMMENTS_KEY, CommentsReducer } from './+state/comments/comments.reducer';
+import { CommentEffects } from './+state/comments/comments.effects';
 
 @NgModule({
   imports: [
@@ -63,28 +68,35 @@ import { StorageOrchestration } from './orchestrations/storage.orchestration';
     StoreModule.forFeature(CREDITS_KEY, CreditReducer),
     StoreModule.forFeature(MARKET_KEY, MarketReducer),
     StoreModule.forFeature(OFFERS_KEY, OfferReducer),
+    StoreModule.forFeature(POSTS_KEY, PostsReducer),
     StoreModule.forFeature(PROJECTS_KEY, ProjectsReducer),
     StoreModule.forFeature(REQUESTS_KEY, RequestReducer),
     StoreModule.forFeature(TRANSACTIONS_KEY, TransactionsReducer),
     StoreModule.forFeature(USER_SESSION_KEY, UserSessionReducer),
     StoreModule.forFeature(VOUCHERS_KEY, VoucherReducer),
+    StoreModule.forFeature(COMMENTS_KEY, CommentsReducer),
     EffectsModule.forFeature([
       CmProfileEffects,
       CreditsEffects,
+      CommentEffects,
       EpProfileEffects,
       MarketEffects,
       OffersEffects,
+      PostEffects,
       ProjectsEffects,
       RequestsEffects,
       SpProfileEffects,
       TransactionsEffects,
       UserSessionEffects,
       VouchersEffects,
+      CommentEffects,
     ]),
     OrchaModule.forFeature({
       orchestrations: [
+        ActivityPostOrchestration,
         ChangeMakerOrchestration,
         ChatOrchestration,
+        CommentOrchestration,
         CreditOrchestration,
         EnrollmentOrchestration,
         EpApplicationOrchestration,

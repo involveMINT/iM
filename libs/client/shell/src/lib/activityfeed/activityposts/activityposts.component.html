@@ -1,0 +1,38 @@
+<ng-container *ngIf="state$ | async as state">
+  <ion-header [class.ion-no-border]="!state.loaded">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Activity</ion-title>
+      <ion-buttons slot="end">
+        <ion-button class="overlap" (click)="viewDigest()">
+          <ion-icon slot="icon-only" name="notifications" ></ion-icon>
+          <ion-badge *ngIf="state.digestPosts.length > 0" color="danger" id="red-badge">{{state.digestPosts.length}}</ion-badge>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-progress-bar type="indeterminate" [class.hide]="state.loaded"></ion-progress-bar>
+  </ion-header>
+
+  <ion-content>
+    <div class="im-cont" *ngIf="state.loaded">
+      <div class="im-centered" *ngIf="state.posts.length < 1 && state.loaded">
+        <div [style.display]="'grid'" [style.gap]="'0.1rem'">There are no activity posts.</div>
+      </div>
+
+      <app-post
+        [post]="post"
+        *ngFor="let post of state.posts; trackBy: trackPost"
+      >
+      </app-post>
+
+      <ion-infinite-scroll threshold="100px" *ngIf="!allPagesLoaded" (ionInfinite)="loadMore($event)">
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="Loading more posts..."
+        ></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+  </ion-content>
+</ng-container>

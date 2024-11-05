@@ -176,6 +176,14 @@ ion-back-button {
   background-color: var(--im-content-background);
   box-shadow: var(--im-border-color) 0px 0px 7px -2px;
 
+  &.feed {
+    box-sizing: border-box;
+    border: 2px solid var(--im-text-color);
+    filter: drop-shadow(0px 12px 36px rgba(0, 0, 0, 0.18));
+    height: 36px;
+    width: 37.03px;
+  }
+
   &.large {
     height: 75px;
     width: 75px;
