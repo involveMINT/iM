@@ -254,7 +254,7 @@ export class UserSessionEffects {
               from(
                 this.status.presentAlertWithAction({
                   alertData: {
-                    title: 'Add Business Profile',
+                    title: 'Invite a Business',
                     description: `Now that the application has been approved, would you like to temporarily add the business's ExchangePartner profile to your account? (You will need to go through the onboarding for the business)`,
                   },
                   buttonText: 'Add',
