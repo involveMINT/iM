@@ -12,7 +12,10 @@ import { DeepReadonly, STATES } from '@involvemint/shared/util';
 import { IonSlides } from '@ionic/angular';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { subYears } from 'date-fns';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil, tap, take } from 'rxjs/operators';
+import { ChangeMakerService } from '@involvemint/server/core/application-services';
+import { ImAuthTokenStorage } from '@involvemint/client/shared/data-access';
+
 
 /**
  * Schema to create ChangeMaker Profile
@@ -58,13 +61,35 @@ export class CreateCmProfileComponent extends StatefulComponent<State> implement
   constructor(
     private readonly uf: UserFacade,
     private readonly handleRestClient: HandleRestClient,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly changeMakerService: ChangeMakerService 
   ) {
     super({ verifyingHandle: false });
   }
 
   ngOnInit(): void {
+    // Get auth token from storage, similar to user-session.effects.ts
+    const authToken = ImAuthTokenStorage.getValue()?.token;
+
+    if (authToken) {
+      // Pre-populate form with data from the backend
+      this.changeMakerService.getPrePopulatedData(authToken).then((data) => {
+        if (data) {
+          this.createProfileForm.patchValue({
+            firstName: data.firstName || '',
+            lastName: data.lastName || '',
+            phone: data.phone || '',
+          });
+        }
+      });
+    } else {
+      console.error('Authentication token is missing');
+    }
+
+    // Verify handle uniqueness
     this.effect(() => verifyHandleUniqueness(this.createProfileForm, this.handleRestClient, this));
+
+    // Check for onboarding state from query parameters
     this.route.queryParams
       .pipe(
         tap((q) => {
