@@ -916,25 +916,26 @@ export class ImAppComponent extends StatefulComponent<State> implements OnInit {
         take(1),
         withLatestFrom(this.activatedRoute.queryParams),
         tap(([{ changeMaker, exchangeAdmins, serveAdmins, epApplications, spApplications }, query]) => {
-          const noProfiles =
-            !changeMaker &&
-            exchangeAdmins.length === 0 &&
-            serveAdmins.length === 0 &&
-            epApplications.length === 0 &&
-            spApplications.length === 0;
-          if (noProfiles) {
-            const register = {
-              cm: () => this.route.to.applications.cm.ROOT(),
-              sp: () => this.route.to.applications.sp.ROOT(),
-              ep: () => this.route.to.applications.ep.ROOT(),
-              market: () => this.route.to.applications.cm.ROOT(),
-            };
-            const fn = register[query['register'] as keyof typeof register];
-            if (fn) {
-              fn();
-            } else {
-              this.welcome.open();
-            }
+          // const noProfiles =
+          //   !changeMaker &&
+          //   exchangeAdmins.length === 0 &&
+          //   serveAdmins.length === 0 &&
+          //   epApplications.length === 0 &&
+          //   spApplications.length === 0;
+          if (!changeMaker) {
+            // const register = {
+            //   cm: () => this.route.to.applications.cm.ROOT(),
+            //   sp: () => this.route.to.applications.sp.ROOT(),
+            //   ep: () => this.route.to.applications.ep.ROOT(),
+            //   market: () => this.route.to.applications.cm.ROOT(),
+            // };
+            // const fn = register[query['register'] as keyof typeof register];
+            // if (fn) {
+            //   fn();
+            // } else {
+            //   this.welcome.open();
+            // }
+            this.route.to.applications.cm.ROOT();
           }
         }),
         switchMap(() =>
