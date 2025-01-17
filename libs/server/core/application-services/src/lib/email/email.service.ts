@@ -37,9 +37,14 @@ export class EmailService {
   }
 
   sendEmailVerification(email: string, hash: string, registerAs?: SignUpDto['registerAs']) {
-    if (this.shouldNotSendNotification) return;
-
-    const url = `${environment.appUrl}${this.route.path.verifyEmail.ROOT}?email=${email}&hash=${hash}&register=${registerAs}`;
+    const url = `${environment.appUrl}${this.route.path.verifyEmail.ROOT}` +
+      `?email=${encodeURIComponent(email)}` +
+      `&hash=${hash}` +
+      `&register=${registerAs}`;
+    if (this.shouldNotSendNotification) {
+      console.log('url', url);
+      return;
+    }
 
     const msg = {
       from: this.noreply,
